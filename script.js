@@ -1,64 +1,38 @@
-// Puan ve Claim Ayarları
-let points = 3286; // İlk puan
-let lastClaimTime = localStorage.getItem("lastClaimTime") || 0;
-const claimInterval = 8 * 60 * 60 * 1000; // 8 saat
+let points = 0;
+let nextClaimTime = localStorage.getItem('nextClaimTime') || 0;
 
-// Sayfa Yüklenince Puan ve Buton Durumunu Güncelle
-window.onload = function () {
-    updatePoints();
-    checkClaimStatus();
-};
+document.getElementById("points").innerText = `₿ ${points}`;
 
-// Puanı Güncelle
-function updatePoints() {
-    document.getElementById("points").innerText = `₿ ${points}`;
-}
-
-// Claim Butonu Durum Kontrolü
-function checkClaimStatus() {
-    const currentTime = new Date().getTime();
-    const timeLeft = claimInterval - (currentTime - lastClaimTime);
-
-    if (timeLeft > 0) {
-        disableClaimButton(timeLeft);
+function claimPoints() {
+    const now = new Date().getTime();
+    if (now >= nextClaimTime) {
+        points += 100;
+        document.getElementById("points").innerText = `₿ ${points}`;
+        
+        nextClaimTime = now + 8 * 60 * 60 * 1000; // 8 saat ekle
+        localStorage.setItem('nextClaimTime', nextClaimTime);
+        startTimer();
     } else {
-        enableClaimButton();
+        alert("Claim butonu 8 saatte bir kullanılabilir!");
     }
 }
 
-// Claim Butonunu Devre Dışı Bırak ve Zamanlayıcı Başlat
-function disableClaimButton(timeLeft) {
-    const button = document.getElementById("claimBtn");
-    button.disabled = true;
+function startTimer() {
+    const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = nextClaimTime - now;
 
-    const timer = document.getElementById("timer");
-    const countdown = setInterval(() => {
-        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        if (distance <= 0) {
+            clearInterval(interval);
+            document.getElementById("timer").innerText = "Claim available!";
+        } else {
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        timer.innerText = `Next claim in ${hours}h ${minutes}m ${seconds}s`;
-
-        if (timeLeft <= 0) {
-            clearInterval(countdown);
-            enableClaimButton();
+            document.getElementById("timer").innerText = `Next claim: ${hours}h ${minutes}m ${seconds}s`;
         }
-        timeLeft -= 1000;
     }, 1000);
 }
 
-// Claim Butonunu Aktif Et
-function enableClaimButton() {
-    const button = document.getElementById("claimBtn");
-    button.disabled = false;
-    document.getElementById("timer").innerText = "";
-}
-
-// Claim İşlemi
-function claimPoints() {
-    points += 100;
-    lastClaimTime = new Date().getTime();
-    localStorage.setItem("lastClaimTime", lastClaimTime);
-    updatePoints();
-    checkClaimStatus();
-}
+startTimer();
