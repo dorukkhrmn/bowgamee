@@ -7,23 +7,44 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Ana İçerik -->
     <div class="container">
         <!-- Profil Görseli ve Kullanıcı Adı -->
         <div class="profile">
-            <div class="avatar">AD</div>
-            <p class="username">wasdhamstwr</p>
+            <div id="avatar" class="avatar">A</div>
+            <p id="username" class="username">@username</p>
         </div>
 
         <!-- Puan Gösterimi -->
         <div class="points">
-            <p id="points">₿ 3,286</p>
+            <p id="points">₿ 0</p>
         </div>
 
         <!-- Claim Butonu -->
         <button id="claimBtn" onclick="claimPoints()">Claim ₿ 100</button>
 
         <!-- Zamanlayıcı -->
-        <p id="timer" class="timer"></p>
+        <p id="timer" class="timer">Next claim: 8h 0m 0s</p>
+
+        <!-- Yeni Navigasyon Butonları -->
+        <div class="navigation">
+            <a href="index.html" class="nav-item">
+                <img src="icons/home.png" alt="Home"> 
+                <span>Home</span>
+            </a>
+            <a href="earn.html" class="nav-item">
+                <img src="icons/earn.png" alt="Earn">
+                <span>Earn</span>
+            </a>
+            <a href="referral.html" class="nav-item">
+                <img src="icons/frens.png" alt="Frens">
+                <span>Frens</span>
+            </a>
+            <a href="wallet.html" class="nav-item">
+                <img src="icons/wallet.png" alt="Wallet">
+                <span>Wallet</span>
+            </a>
+        </div>
     </div>
 
     <script src="script.js"></script>
